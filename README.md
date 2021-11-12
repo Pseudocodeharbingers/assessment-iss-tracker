@@ -8,7 +8,7 @@ receive the city the ISS was over at that moment. A more detailed explanation of
 2.	Import it in any Python IDE (Pycharm / Microsoft Visual Studio)
 3.	Enter directory into the terminal
 4.	Install all the requirements and dependency
-5.	Run <python server.py runserver>
+5.	Run python server.py runserver
 6.	Additionally, you can view the initial demo on https://assessment-iss-tracker.herokuapp.com/
 
 # Extension used
