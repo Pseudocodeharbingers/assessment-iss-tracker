@@ -110,7 +110,6 @@ python-dateutil==2.8.2
 python-decouple==3.3
 python-telegram-bot==13.7
 pytz==2020.1
-pywin32==301
 PyYAML==5.4.1
 pyzmq==22.2.1
 rasa==0.1.1
