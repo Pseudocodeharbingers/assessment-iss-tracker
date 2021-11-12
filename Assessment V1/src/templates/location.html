@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <script src='https://cdn.plot.ly/plotly-2.4.2.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js'></script>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="{{url_for('static',filename='styles.css')}}">
+    <script>
+        const INITIAL_POSE = [
+            parseFloat("{{initial_pose['latitude']}}"),
+            parseFloat("{{initial_pose['longitude']}}"),
+        ];
+        const SATELLITE_ICON = "{{url_for('static',filename='img/satellite.png')}}";
+    </script>
+
+</head>
+<body>
+<div class="banner">
+    <h1>International Space Station (ISS) Tracker ({{Date1}}, GMT+08:00)</h1>
+</div>
+<div class="topnav">
+    <a href="#JSONData">JSON Data</a>
+    <a href="#Visualization">Visualization</a>
+    <a href="#Additional">Additional</a>
+</div>
+
+<h2>Timestamp in 2 hours</h2>
+<table>
+    <tr>
+        <th>Timestamp</th>
+        {% for item in listTime %}
+        <td>{{ item }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>Time (Epoch equivalent)</th>
+        {% for item in NewStartTime %}
+        <td>{{ item.split(',') }}</td>
+        {% endfor %}
+    </tr>
+
+</table>
+<h2>Extracted JSON Data</h2>
+<p id="JSONData"></p>
+<div class="results">
+    <div>
+        {{test | safe}}
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <p id="Visualization"></p>
+        <h2>Real-Time ISS Location</h2>
+        <div id="__map">
+            <script src="{{url_for('static',filename='app.js')}}"></script>
+        </div>
+    </div>
+    <div class="column">
+        <h2>ISS Location for Two Hours Window</h2>
+        <div id='myDiv'>
+            <script>
+        var url = '{{url}}';
+
+        d3.json(url, (err, raw) => {
+          var lat = raw.map(f => f.latitude);
+          var long = raw.map(f => f.longitude);
+          var timestamp = raw.map(f => f.timestamp);
+
+          var data = [
+            { type: "scattermapbox",
+              lon: long,
+              lat: lat,
+              timestamp : timestamp,
+              marker: { color: "red", size: 20},
+              hovertemplate:
+                    "<b>Satellites 25544</b><br><br>" +
+                    "latitude: %{lat:}<br>" +
+                    "longitude: %{lon:}<br>" +
+                    "timezone: GMT+08:00}"
+            }
+          ];
+
+         var layout = {
+              dragmode: "zoom",
+              mapbox: { style: "open-street-map", center: { lat: 38, lon: -90 }, zoom: 3 },
+              margin: { r: 0, t: 0, b: 0, l: 0 }
+            };
+
+          Plotly.newPlot('myDiv', data, layout);
+        });
+      </script>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="column">
+        <p id="Additional"></p>
+        <h2>Live Feed</h2>
+        <a class="twitter-timeline" href="https://twitter.com/Space_Station?ref_src=twsrc%5Etfw" data-width="100%"  data-height="80vh">
+            Tweets by Space_Station</a>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+    <div class="column">
+        <div class="header">
+            <img src="https://creazilla-store.fra1.digitaloceanspaces.com/cliparts/67843/child-astronaut-clipart-xl.png" alt="logo" width="100px" height="100px"/>
+            <h2>People on the ISS</h2>
+        </div>
+            {{people | safe}}
+   </div>
+</div>
+
+</body>
+</html>
