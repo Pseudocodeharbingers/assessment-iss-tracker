@@ -9,7 +9,7 @@ receive the city the ISS was over at that moment. A more detailed explanation of
 3.	Enter directory into the terminal
 4.	Install all the requirements and dependency
 5.	Run python server.py runserver
-6.	Additionally, you can view the initial demo on https://assessment-iss-tracker.herokuapp.com/
+6.	Additionally, you can view the initial demo on https://assessment-iss-tracker-v1.herokuapp.com/
 
 # Extension used
   ![architecture](https://user-images.githubusercontent.com/91973389/141476260-c7a1b1f0-bca2-4880-b6ee-48eaa6795d54.png)
