@@ -25,17 +25,28 @@ def location():
     gettime = request.args.get('Time')
     LatestTime = datetime.strptime(gettime, '%H:%M')
     ConvertTime = LatestTime.time()
-    CurrentTime = datetime.combine(date.min, ConvertTime)-datetime.min
-    timedeltaobj = timedelta(hours=2)
-    StartTime = CurrentTime - timedeltaobj
-    TimeinEpoch = []
-    NewStartTime = []
+    CurrentTime = datetime.combine(date.min, ConvertTime) - datetime.min
+    timedeltaobj = timedelta(hours=1)
+    StartTimeLess = CurrentTime - timedeltaobj
+    StartTimeMore = CurrentTime + timedeltaobj
+    TimeinEpochLess = []
+    TimeinEpochMore = []
+    NewStartTimeLess = []
+    NewStartTimeMore = []
 
-    while StartTime < CurrentTime:
-        StartTime = StartTime + timedelta(minutes=10)
-        NewStartTime.append(str(StartTime))
-        t = time.mktime(time.strptime(getdate + " " + str(StartTime), "%Y-%m-%d %H:%M:%S"))
-        TimeinEpoch.append(int(t))
+    while StartTimeLess < CurrentTime:
+        StartTimeLess = StartTimeLess + timedelta(minutes=10)
+        NewStartTimeLess.append(str(StartTimeLess))
+        t = time.mktime(time.strptime(getdate + " " + str(StartTimeLess), "%Y-%m-%d %H:%M:%S"))
+        TimeinEpochLess.append(int(t))
+
+    while StartTimeMore > CurrentTime:
+        StartTimeMore = StartTimeMore - timedelta(minutes=10)
+        NewStartTimeMore.append(str(StartTimeMore))
+        t = time.mktime(time.strptime(getdate + " " + str(StartTimeMore), "%Y-%m-%d %H:%M:%S"))
+        TimeinEpochMore.append(int(t))
+
+    TimeinEpoch = TimeinEpochLess + TimeinEpochMore
 
     strTimeinEpoch = list(map(str, TimeinEpoch))
     FinalTimeinEpoch = ','.join(strTimeinEpoch)
@@ -48,10 +59,11 @@ def location():
     data_json_people = json.loads(response_people.read())
 
     return render_template('location.html', Date1=datetime.strptime(getdate, '%Y-%m-%d').date(),
-                           Time1=gettime, NewStartTime=list(NewStartTime),
-                           listTime = FinalTimeinEpoch.split(','),
+                           Time1=gettime, NewStartTimeLess=list(NewStartTimeLess),
+                           NewStartTimeMore=list(NewStartTimeMore),
+                           listTime=FinalTimeinEpoch.split(','),
                            people=json2html.convert(json=data_json_people),
-                           url = url, test=json2html.convert(json=data_json),
+                           url=url, test=json2html.convert(json=data_json),
                            initial_pose=get_current_pose())
 
 @app.route('/api/pose')
@@ -67,4 +79,4 @@ def pose_stream():
     return Response(__generate__(), mimetype="text/event-stream")
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=80, debug = False)
+    app.run(host='0.0.0.0', port=80, debug = True)
