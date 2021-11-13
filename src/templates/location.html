@@ -33,17 +33,28 @@
 <table>
     <tr>
         <th>Timestamp</th>
-        {% for item in listTime %}
+        {% for item in listTime[0:6] %}
         <td>{{ item }}</td>
         {% endfor %}
     </tr>
     <tr>
         <th>Time (Epoch equivalent)</th>
-        {% for item in NewStartTime %}
+        {% for item in NewStartTimeLess %}
         <td>{{ item.split(',') }}</td>
         {% endfor %}
     </tr>
-
+    <tr>
+        <th>Timestamp</th>
+        {% for item in listTime[6:] %}
+        <td>{{ item }}</td>
+        {% endfor %}
+    </tr>
+    <tr>
+        <th>Time (Epoch equivalent)</th>
+        {% for item in NewStartTimeMore %}
+        <td>{{ item.split(',') }}</td>
+        {% endfor %}
+    </tr>
 </table>
 <h2>Extracted JSON Data</h2>
 <p id="JSONData"></p>
